@@ -45,14 +45,14 @@ resource "null_resource" "Component" {
   }
   provisioner "file" {
     source = "bootstrap.sh"
-    destination = "/tmp/bootstrap.sh "
+    destination = "/tmp/bootstrap.sh"
   }
 
   provisioner "remote-exec" {
     # Bootstrap script called with private_ip of each node in the cluster
     inline = [
-      "chmod +x /tmp/bootstrap.sh" ,
-      "sudo sh /tmp/bootstrap.sh ${var.tags.Component} ${var.environment} ${var.app_version}"
+      "chmod +x /tmp/bootstrap.sh",
+      "sudo sh /tmp/bootstrap.sh ${var.tags.Component} ${var.environment}"
     ]
   }
 }
@@ -120,7 +120,7 @@ resource "aws_autoscaling_group" "Component" {
 }
 resource "aws_lb_listener_rule" "Component" {
   listener_arn = var.app_alb_listener_arn
-  priority     = 10
+  priority     = var.rule_priority
 
   action {
     type             = "forward"
